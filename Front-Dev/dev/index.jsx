@@ -1,20 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import MyHeader from './MyHeader.jsx';
 
-var Header = React.createClass({
-  render: function() {
-    return (
-      <header>
-        <nav>
-          <a href="#">Имя</a>
-          <a href="#">Главная</a>
-          <a href="#">Мойки</a>
-          
-        </nav>
-      </header>
-    );
-  }
-});
  
 var HelloWorld = React.createClass({
   render: function() {
@@ -27,7 +14,7 @@ var HelloWorld = React.createClass({
  
 ReactDOM.render(
   <div>
-    <Header/>
+    <MyHeader/>
     <HelloWorld greetTarget="Batman"/>
     <HelloWorld greetTarget="Iron Man"/>
     <HelloWorld greetTarget="Nicolas Cage"/>
