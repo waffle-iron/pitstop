@@ -12,4 +12,10 @@ public class LoginController {
         return "login";
     }
 
+    @RequestMapping(value ={"/owner"}, method = RequestMethod.GET)
+    public String owner() {
+        return "owner";
+    }
+
+
 }

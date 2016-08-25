@@ -2,6 +2,16 @@ import React from 'react';
 
 
 export default class MyHeader extends React.Component{
+	componentWillMount(){
+		$.get( "/test", function( response ) {
+			console.log( response ); // server response
+		});
+	};
+
+	getUser(){
+		console.log("getUser was call");
+	};
+
 	render() {
 	    return (
 	      <header>
@@ -14,7 +24,7 @@ export default class MyHeader extends React.Component{
 							  <span className="icon-bar"></span>
 							  <span className="icon-bar"></span>
 						  </button>
-						  <div className="navbar-brand">UserName</div>
+						  <div className="navbar-brand" onLoad={this.getUser}>UserName</div>
 					  </div>
 
 					  <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
