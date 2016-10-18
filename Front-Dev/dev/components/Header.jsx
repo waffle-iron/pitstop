@@ -1,19 +1,16 @@
 import React from 'react';
-
+import { Router, Route, Link, IndexRoute, IndexLink, hashHistory } from 'react-router'
+import MessageConteiner from './../containers/MessageContainer'
 
 export default class MyHeader extends React.Component{
-	componentWillMount(){
-		$.get( "/test", function( response ) {
-			console.log( response ); // server response
-		});
-	};
 
-	getUser(){
-		console.log("getUser was call");
+	constructor(props) {
+		super(props);
 	};
 
 	render() {
 	    return (
+		<div className = "page">
 	      <header>
 			  <nav className="navbar navbar-default">
 				  <div className="container-fluid">
@@ -24,13 +21,13 @@ export default class MyHeader extends React.Component{
 							  <span className="icon-bar"></span>
 							  <span className="icon-bar"></span>
 						  </button>
-						  <div className="navbar-brand" onLoad={this.getUser}>UserName</div>
+						  <div className="navbar-brand" >{this.props.userName}</div>
 					  </div>
 
 					  <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						  <ul className="nav navbar-nav">
-							  <li className="active"><a href="#">Главная <span className="sr-only">(current)</span></a></li>
-							  <li><a href="#">Link</a></li>
+							  <li className="active" onClick={()=>this.props.resetInfoAndError()}><Link to="/owner.html">Главная<span className="sr-only">(current)</span></Link></li>
+							  <li onClick={()=>this.props.resetInfoAndError()}><Link to="/carwash">Мойки</Link></li>
 						  </ul>
 
 						  <ul className="nav navbar-nav navbar-right">
@@ -49,7 +46,18 @@ export default class MyHeader extends React.Component{
 					  </div>
 				  </div>
 			  </nav>
-	      </header>
+		  </header>
+		  <MessageConteiner/>
+		  <div className="content">
+			{React.cloneElement(
+				this.props.children,
+				{resetInfoAndError: this.props.resetInfoAndError,
+				 saveInfo: this.props.saveInfo
+				}
+			)}
+		  </div>
+		</div>
 	    );
   }
 };
+

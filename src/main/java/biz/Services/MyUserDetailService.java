@@ -1,6 +1,9 @@
-package biz.learing;
+package biz.Services;
 
+import biz.dao.CredentialDAOCrud;
+import biz.models.Credential;
 import biz.models.Role;
+import biz.models.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,19 +21,23 @@ import java.util.List;
 @Service("userDetailsService")
 public class MyUserDetailService implements UserDetailsService {
 
-    UserDAO userDAO;
+    CredentialDAOCrud credentialDAO;
 
     @Autowired
-    public MyUserDetailService(UserDAO userDAO){
-        this.userDAO = userDAO;
+    public MyUserDetailService(CredentialDAOCrud credentialDAO){
+        this.credentialDAO = credentialDAO;
     }
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User user = userDAO.findByUserLogin(name);
-        System.out.println("The following user was taken: " + user);
-        List<GrantedAuthority> authorities = buildUserAuthority(user.getRole());
-        return buildUserForAuthentication(user, authorities);
+        Credential credential = credentialDAO.findByUserLoginAndEnable(name, true);
+        if (credential == null) {
+            throw new UsernameNotFoundException("User with name = " + name + " wasn't found");
+        }
+
+        System.out.println("The following user was taken: " + credential);
+        List<GrantedAuthority> authorities = buildUserAuthority(credential.getPerson().getRole());
+        return buildUserForAuthentication(credential, authorities);
     }
 
     private List<GrantedAuthority> buildUserAuthority(Role role) {
@@ -41,7 +48,7 @@ public class MyUserDetailService implements UserDetailsService {
 
     // Converts com.mkyong.users.model.User user to
     // org.springframework.security.core.userdetails.User
-    private org.springframework.security.core.userdetails.User buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
-        return new org.springframework.security.core.userdetails.User(user.getUserLogin(), user.getUserPassword(), user.getEnable(), true, true, true, authorities);
+    private org.springframework.security.core.userdetails.User buildUserForAuthentication(Credential user, List<GrantedAuthority> authorities) {
+        return new SecurityUser(user.getUserLogin(), user.getUserPassword(), user.getEnable(), true, true, true, authorities, user.getPerson());
     }
 }

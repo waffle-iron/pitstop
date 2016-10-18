@@ -16,6 +16,10 @@
           integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
           crossorigin="anonymous"></script>
 
+  <script src="/resources/js/utils.js"></script>
+
+  <meta name="_csrf" content="${_csrf.token}"/>
+  <meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
  
 <body>
@@ -25,5 +29,9 @@
 
 
 </body>
+  <script>
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+  </script>
  
 </html>
